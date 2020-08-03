@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_flutter/response_button.dart';
+import 'package:quiz_flutter/question.dart';
 
 main() => runApp(QuizApp());
 
@@ -9,38 +11,43 @@ class _QuizAppState extends State<QuizApp> {
     setState(() {
       _selectedQuestion++;
     });
-    print(_selectedQuestion);
   }
 
   @override
   Widget build(BuildContext context) {
     final quiz = [
-      'qual a sua cor favorita?',
-      'qual o seu animal favorito?',
+      {
+        'question': 'Qual é a sua cor favorita?',
+        'options': ['Preto', 'Vermelho', 'Verde', 'Azul']
+      },
+      {
+        'question': 'Qual é a sua comida favorita?',
+        'options': ['Macarronada', 'Picanha', 'Salada', 'Doces']
+      },
+      {
+        'question': 'Qual é o seu tipo de filme favorito?',
+        'options': [
+          'Aventura',
+          'Romance',
+          'Ficção Científica',
+          'Ação',
+          'Comédia'
+        ]
+      }
     ];
+
+    List<String> allOptions = quiz[_selectedQuestion]['options'];
 
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Quiz"),
+          title: Text('Quiz'),
           centerTitle: true,
         ),
         body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Text(quiz[_selectedQuestion], textAlign: TextAlign.center,),
-            RaisedButton(
-              child: Text("Resposta 1"),
-              onPressed: _response,
-            ),
-            RaisedButton(
-              child: Text("Resposta 2"),
-              onPressed: _response,
-            ),
-            RaisedButton(
-              child: Text("Resposta 3"),
-              onPressed: _response,
-            )
+            Question(quiz[_selectedQuestion]['question']),
+            ...allOptions.map((text) => ResponseButton(text, _response)).toList()
           ],
         ),
       ),
