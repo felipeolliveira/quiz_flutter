@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_flutter/response_button.dart';
-import 'package:quiz_flutter/question_title.dart';
+import 'package:quiz_flutter/quiz_container.dart';
+
 import 'package:quiz_flutter/result.dart';
 
 main() => runApp(QuizApp());
@@ -24,21 +24,20 @@ class _QuizAppState extends State<QuizApp> {
   var _selectedQuestion = 0;
 
   void _response() {
-    if (haveSelectQuestion) {
+    if (_haveSelectedQuestion) {
       setState(() {
         _selectedQuestion++;
       });
     }
   }
 
-  bool get haveSelectQuestion {
+  bool get _haveSelectedQuestion {
     return _selectedQuestion < _quiz.length;
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> allOptions =
-        haveSelectQuestion ? _quiz[_selectedQuestion]['options'] : null;
+    
 
     return MaterialApp(
       home: Scaffold(
@@ -46,15 +45,8 @@ class _QuizAppState extends State<QuizApp> {
           title: Text('Perguntados'),
           centerTitle: true,
         ),
-        body: haveSelectQuestion
-            ? Column(
-                children: <Widget>[
-                  QuestionTitle(_quiz[_selectedQuestion]['question']),
-                  ...allOptions
-                      .map((text) => ResponseButton(text, _response))
-                      .toList()
-                ],
-              )
+        body: _haveSelectedQuestion
+            ? QuizContainer(quiz: _quiz, response: _response, selectedQuestion: _selectedQuestion, haveSelectedQuestion: _haveSelectedQuestion,)
             : Result()
       ),
     );
