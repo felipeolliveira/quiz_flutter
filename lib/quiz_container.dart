@@ -5,7 +5,7 @@ import 'package:quiz_flutter/question_title.dart';
 class QuizContainer extends StatelessWidget {
   final int selectedQuestion;
   final List<Map<String, Object>> quiz;
-  final void Function() response;
+  final void Function(int) response;
   final bool haveSelectedQuestion;
 
   QuizContainer({
@@ -17,12 +17,17 @@ class QuizContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> allOptions =
-        haveSelectedQuestion ? quiz[selectedQuestion]['options'] : null;
+    List<Map<String, Object>> allOptions = this.haveSelectedQuestion
+        ? this.quiz[selectedQuestion]['options']
+        : null;
+
     return Column(
       children: <Widget>[
-        QuestionTitle(quiz[selectedQuestion]['question']),
-        ...allOptions.map((text) => ResponseButton(text, response)).toList()
+        QuestionTitle(this.quiz[selectedQuestion]['question']),
+        ...allOptions
+            .map((option) =>
+                ResponseButton(option['text'], () => response(option['score'])))
+            .toList()
       ],
     );
   }
